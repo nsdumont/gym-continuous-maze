@@ -161,7 +161,7 @@ class ContinuousMaze(gym.Env):
             truncated = False
         return self.pos.copy(), reward, terminated, truncated,  {}
 
-    def reset(self, seed=0):
+    def reset(self, seed=0, **kwargs):
         self.seed = seed
         self.pos = np.zeros(2)
         self.all_pos.append(self.pos.copy())
