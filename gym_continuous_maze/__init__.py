@@ -9,31 +9,31 @@ register(
 register(
     id="ContinuousMaze-5x5-v0",
     entry_point="gym_continuous_maze.gym_continuous_maze:ContinuousMaze5x5",
-    max_episode_steps=1000,
+    max_episode_steps=500,
 )
 
 register(
     id="ContinuousMaze-6x6-v0",
     entry_point="gym_continuous_maze.gym_continuous_maze:ContinuousMaze6x6",
-    max_episode_steps=1000,
+    max_episode_steps=600,
 )
 
 register(
     id="ContinuousMaze-7x7-v0",
     entry_point="gym_continuous_maze.gym_continuous_maze:ContinuousMaze7x7",
-    max_episode_steps=1000,
+    max_episode_steps=700,
 )
 
 register(
     id="ContinuousMaze-8x8-v0",
     entry_point="gym_continuous_maze.gym_continuous_maze:ContinuousMaze8x8",
-    max_episode_steps=1000,
+    max_episode_steps=800,
 )
 
 register(
     id="ContinuousMaze-9x9-v0",
     entry_point="gym_continuous_maze.gym_continuous_maze:ContinuousMaze9x9",
-    max_episode_steps=1000,
+    max_episode_steps=900,
 )
 
 register(
