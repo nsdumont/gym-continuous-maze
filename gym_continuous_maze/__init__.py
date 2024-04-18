@@ -172,37 +172,37 @@ register(
 
 ############### goalenvs
 register(
-    id="GoalGoalContinuousMaze-v0",
-    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze",
+    id="GoalContinuousMaze-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze",
     max_episode_steps=100,
 )
 
 register(
-    id="GoalGoalContinuousMaze-5x5-v0",
-    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze5x5",
+    id="GoalContinuousMaze-5x5-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze5x5",
     max_episode_steps=500,
 )
 
 register(
-    id="GoalGoalContinuousMaze-6x6-v0",
-    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze6x6",
+    id="GoalContinuousMaze-6x6-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze6x6",
     max_episode_steps=600,
 )
 
 register(
-    id="GoalGoalContinuousMaze-7x7-v0",
-    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze7x7",
+    id="GoalContinuousMaze-7x7-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze7x7",
     max_episode_steps=700,
 )
 
 register(
-    id="GoalGoalContinuousMaze-8x8-v0",
-    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze8x8",
+    id="GoalContinuousMaze-8x8-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze8x8",
     max_episode_steps=800,
 )
 
 register(
-    id="GoalGoalContinuousMaze-9x9-v0",
+    id="GoalContinuousMaze-9x9-v0",
     entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze9x9",
     max_episode_steps=900,
 )

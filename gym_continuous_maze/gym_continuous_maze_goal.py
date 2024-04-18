@@ -154,17 +154,17 @@ class GoalContinuousMaze(GoalEnv):
         "render_fps": 10,
     }
 
-    def __init__(self, maze_file=None, max_steps=1e4, res=500,render_mode='human', **kwargs) -> None:
+    def __init__(self, maze_file=None, max_steps=1e4, res=500,
+                 render_mode='human',reward_type='sparse', **kwargs) -> None:
         self.screen = None
         self.isopen = True
         self.window=None
         self.render_mode = render_mode
+        self.reward_type = reward_type
         self.all_pos = []
         self.max_steps = max_steps
         self.action_space = spaces.Box(-1.0, 1.0, (2,), dtype="float32")
         if maze_file is None:
-            self.observation_space = spaces.Box(0, 24, (2,))
-            self.goal = np.arry([23,23])
             self.walls = ex_walls
             size = ex_wall_size
         else:
@@ -182,8 +182,9 @@ class GoalContinuousMaze(GoalEnv):
         self.scale = res/(size + 0.1)
         self.width = res # right now assuming a square area
         self.height = res
+        self.goal_dist = 0.45
         
-        self.goal = np.array([size-1,size-1])
+        self.goal = np.array([size-1.0,size-1.0])
         self.observation_space = spaces.Dict(
             dict(
                 desired_goal=spaces.Box(0, size, (2,), dtype="float64"),
@@ -297,21 +298,54 @@ class GoalContinuousMaze(GoalEnv):
         #     if intersection is not None:
         #         new_pos = self.pos
         # self.all_pos.append(self.pos.copy())
-        if np.linalg.norm(self.pos - self.goal) < 0.5:
-            reward = 1 - 0.9*(self.num_steps/self.max_steps)
+        dist = np.linalg.norm(self.pos - self.goal) 
+        
+        if dist <= self.goal_dist:
+            reward = 1.0 - 0.9*(self.num_steps/self.max_steps)
             terminated = True
         else:
             reward = 0
             terminated = False
+            
+        if self.reward_type == "dense":
+            reward = np.exp(-dist + np.log(1 - 0.9*(self.num_steps/self.max_steps)))
+        
         if self.num_steps >= self.max_steps:
             truncated = True
-            terminated = True
         else:
             truncated = False
         obs_dict = {"desired_goal": self.goal.copy(),
                     "achieved_goal": self.pos.copy(),
                     "observation": self.pos.copy()}
         return obs_dict, reward, terminated, truncated,  {}
+    
+    def compute_reward(self, achieved_goal, desired_goal, info):
+        dist = np.linalg.norm(self.pos - self.goal) 
+        
+        if self.reward_type == "sparse":
+            if dist <= self.goal_dist:
+                reward = 1.0 - 0.9*(self.num_steps/self.max_steps)
+            else:
+                reward = 0
+        elif self.reward_type == "dense":
+            reward = np.exp(-dist + np.log(1 - 0.9*(self.num_steps/self.max_steps)))
+            
+        return reward
+        
+            
+    def compute_terminated(self, achieved_goal, desired_goal, info):
+        if np.linalg.norm(self.pos - self.goal) <= self.goal_dist:
+            terminated = True
+        else:
+            terminated = False
+        return terminated
+            
+    def compute_truncated(self, achieved_goal, desired_goal, info):
+        if self.num_steps >= self.max_steps:
+            truncated = True
+        else:
+            truncated = False
+        return truncated
 
     def render(self, **kwargs):
         ## call pygame

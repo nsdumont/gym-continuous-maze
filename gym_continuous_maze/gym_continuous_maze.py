@@ -152,17 +152,17 @@ class ContinuousMaze(gym.Env):
         "render_fps": 10,
     }
 
-    def __init__(self, maze_file=None, max_steps=1e4, res=500,render_mode='human', **kwargs) -> None:
+    def __init__(self, maze_file=None, max_steps=1e4, res=500,
+                 render_mode='human',reward_type='sparse', **kwargs) -> None:
         self.screen = None
         self.isopen = True
         self.window=None
         self.render_mode = render_mode
+        self.reward_type = reward_type
         self.all_pos = []
         self.max_steps = max_steps
-        self.action_space = spaces.Box(-1, 1, (2,))
+        self.action_space = spaces.Box(-1.0, 1.0, (2,), dtype="float32")
         if maze_file is None:
-            self.observation_space = spaces.Box(0, 24, (2,))
-            self.goal = np.arry([23,23])
             self.walls = ex_walls
             size = ex_wall_size
         else:
@@ -174,14 +174,16 @@ class ContinuousMaze(gym.Env):
                     maze_file = rel_path
                 else:
                     raise FileExistsError("Cannot find %s." % maze_file)
-            self.observation_space = spaces.Box(-0.5, size - 0.5, (2,))
-            self.goal = np.array([size-1,size-1])
-            self.walls = np.load(maze_file, allow_pickle=False, fix_imports=True)
-            
+                self.walls = np.load(maze_file, allow_pickle=False, fix_imports=True)
+                
         self.res = res
         self.scale = res/(size + 0.1)
         self.width = res # right now assuming a square area
         self.height = res
+        self.goal_dist = 0.45
+        
+        self.goal = np.array([size-1.0,size-1.0])
+        self.observation_space = spaces.Box(0, size, (2,), dtype="float64")
         
             
     def _gen_world(self, width, height):
@@ -279,21 +281,19 @@ class ContinuousMaze(gym.Env):
         self.pos = self._check_collision(self.pos.copy(), action)
         self._update_agent(self.pos)
         self.agent.collision = False
-        # new_pos = self.pos + action
-        # for wall in self.walls:
-        #     intersection = get_intersect(wall[0], wall[1], self.pos, new_pos)
-        #     if intersection is not None:
-        #         new_pos = self.pos
-        # self.all_pos.append(self.pos.copy())
-        if np.linalg.norm(self.pos - self.goal) < 0.5:
-            reward = 1 - 0.9*(self.num_steps/self.max_steps)
+        dist = np.linalg.norm(self.pos - self.goal)
+        if dist <= self.goal_dist:
+            reward = 1.0 - 0.9*(self.num_steps/self.max_steps)
             terminated = True
         else:
             reward = 0
             terminated = False
+            
+        if self.reward_type == "dense":
+            reward = np.exp(-dist + np.log(1 - 0.9*(self.num_steps/self.max_steps)))
+        
         if self.num_steps >= self.max_steps:
             truncated = True
-            terminated = True
         else:
             truncated = False
         return self.pos.copy(), reward, terminated, truncated,  {}
