@@ -90,7 +90,7 @@ class Agent():
     '''
     agent for checking collisions
     '''   
-    def __init__(self, position, scale, radius=0.2, name='agent'):
+    def __init__(self, position, scale, radius=0.1, name='agent'):
         
         ## Create an agent sprite for collision checking 
         #agent_sprite = load_sprite(agent.name)
@@ -117,7 +117,7 @@ class Dummy_Agent():
     '''
     Dummy agent for checking collisions
     '''   
-    def __init__(self, position, scale, radius=0.2):
+    def __init__(self, position, scale, radius=0.1):
         self.rect = pygame.Rect(scale * position[0], scale * position[1], scale*radius, scale*radius)
         
 
