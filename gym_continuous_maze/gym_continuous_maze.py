@@ -154,8 +154,6 @@ class ContinuousMaze(gym.Env):
 
     def __init__(self, maze_file=None, max_steps=1e4, res=500,
                  render_mode='human',reward_type='sparse', **kwargs) -> None:
-        self.screen = None
-        self.isopen = True
         self.window=None
         self.render_mode = render_mode
         self.reward_type = reward_type
@@ -197,7 +195,7 @@ class ContinuousMaze(gym.Env):
         for i in range(self.walls.shape[0]):
             self.world.add_obj(Wall(self.walls[i], scale=self.scale, name=f'wall_{i}', degrees=0))
 
-    def reset(self, seed=0, **kwargs):
+    def reset(self, seed=None, **kwargs):
         self.seed = seed
         self.pos = 0.5 * np.ones(2)
         # self.all_pos = []
@@ -345,47 +343,9 @@ class ContinuousMaze(gym.Env):
 
             return img 
 
-    # def render(self, mode: str = "human"):
-    #     screen_dim = 500
-    #     bound = 13
-    #     scale = screen_dim / (bound * 2)
-    #     offset = screen_dim // 2
-
-    #     if self.screen is None:
-    #         pygame.init()
-    #         try:
-    #             pygame.display.list_modes()
-    #         except:
-    #             import os
-
-    #             os.environ["SDL_VIDEODRIVER"] = "dummy"
-
-    #         self.screen = pygame.display.set_mode((screen_dim, screen_dim))
-    #     self.surf = pygame.Surface((screen_dim, screen_dim))
-    #     self.surf.fill(BLACK)
-    #     for pos in self.all_pos:
-    #         x, y = pos * scale + offset
-    #         gfxdraw.filled_circle(self.surf, int(x), int(y), 1, RED)
-
-    #     for wall in self.walls:
-    #         x1, y1 = wall[0] * scale + offset
-    #         x2, y2 = wall[1] * scale + offset
-    #         gfxdraw.line(self.surf, int(x1), int(y1), int(x2), int(y2), WHITE)
-
-    #     self.surf = pygame.transform.flip(self.surf, flip_x=False, flip_y=True)
-    #     self.screen.blit(self.surf, (0, 0))
-    #     if mode == "human":
-    #         pygame.display.flip()
-    #     elif mode == "rgb_array":
-    #         return np.transpose(np.array(pygame.surfarray.pixels3d(self.screen)), axes=(1, 0, 2))
-    #     else:
-    #         return self.isopen
-
     def close(self):
-        if self.window is not None:
-            pygame.quit()
-            self.isopen = False
-
+        pygame.quit()
+    
 
 
 class ContinuousMaze5x5(ContinuousMaze):
