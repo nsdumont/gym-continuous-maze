@@ -169,3 +169,174 @@ register(
 	entry_point='gym_continuous_maze.gym_continuous_maze:ContinuousMazeBlocks19x19',
 	max_episode_steps=7220,
 )
+
+############### goalenvs
+register(
+    id="GoalGoalContinuousMaze-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze",
+    max_episode_steps=100,
+)
+
+register(
+    id="GoalGoalContinuousMaze-5x5-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze5x5",
+    max_episode_steps=500,
+)
+
+register(
+    id="GoalGoalContinuousMaze-6x6-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze6x6",
+    max_episode_steps=600,
+)
+
+register(
+    id="GoalGoalContinuousMaze-7x7-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze7x7",
+    max_episode_steps=700,
+)
+
+register(
+    id="GoalGoalContinuousMaze-8x8-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalGoalContinuousMaze8x8",
+    max_episode_steps=800,
+)
+
+register(
+    id="GoalGoalContinuousMaze-9x9-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze9x9",
+    max_episode_steps=900,
+)
+
+register(
+    id="GoalContinuousMaze-10x10-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze10x10",
+    max_episode_steps=1000,
+)
+
+register(
+    id="GoalContinuousMaze-11x11-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze11x11",
+    max_episode_steps=1000,
+)
+
+register(
+    id="GoalContinuousMaze-12x12-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze12x12",
+    max_episode_steps=1000,
+)
+
+register(
+    id="GoalContinuousMaze-13x13-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze13x13",
+    max_episode_steps=1000,
+)
+
+register(
+    id="GoalContinuousMaze-14x14-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze14x14",
+    max_episode_steps=1000,
+)
+
+register(
+    id="GoalContinuousMaze-15x15-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze15x15",
+    max_episode_steps=1000,
+)
+
+register(
+    id="GoalContinuousMaze-20x20-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMaze20x20",
+    max_episode_steps=1000,
+)
+
+######
+
+register(
+	id='GoalContinuousMazeBlocks-5x5-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks5x5',
+	max_episode_steps=500,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-6x6-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks6x6',
+	max_episode_steps=720,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-7x7-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks7x7',
+	max_episode_steps=980,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-8x8-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks8x8',
+	max_episode_steps=1280,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-9x9-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks9x9',
+	max_episode_steps=1620,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-10x10-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks10x10',
+	max_episode_steps=2000,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-11x11-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks11x11',
+	max_episode_steps=2420,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-12x12-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks12x12',
+	max_episode_steps=2880,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-13x13-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks13x13',
+	max_episode_steps=3380,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-14x14-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks14x14',
+	max_episode_steps=3920,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-15x15-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks15x15',
+	max_episode_steps=4500,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-16x16-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks16x16',
+	max_episode_steps=5120,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-17x17-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks17x17',
+	max_episode_steps=5780,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-18x18-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks18x18',
+	max_episode_steps=6480,
+)
+
+register(
+	id='GoalContinuousMazeBlocks-19x19-v0',
+	entry_point='gym_continuous_maze.gym_continuous_maze_goal:GoalContinuousMazeBlocks19x19',
+	max_episode_steps=7220,
+)

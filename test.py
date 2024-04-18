@@ -3,7 +3,7 @@ import gym_continuous_maze
 import numpy as np
 import matplotlib.pyplot as plt
 
-env = gym.make('ContinuousMazeBlocks-10x10-v0', render_mode='rgb_array')
+env = gym.make('GoalContinuousMazeBlocks-10x10-v0', render_mode='rgb_array')
 obs,_ = env.reset()
 im = env.render()
 plt.imshow(im)

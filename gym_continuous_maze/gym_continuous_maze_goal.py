@@ -11,6 +11,8 @@ from pygame.math import Vector2
 from pygame.image import load
 from pygame.transform import rotozoom
 
+from gymnasium_robotics.core import GoalEnv
+
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -145,8 +147,8 @@ class Dummy_Agent():
         
 
 
-class ContinuousMaze(gym.Env):
-    """Continuous maze environment."""
+class GoalContinuousMaze(GoalEnv):
+    """Continuous maze goal environment."""
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "render_fps": 10,
@@ -159,7 +161,7 @@ class ContinuousMaze(gym.Env):
         self.render_mode = render_mode
         self.all_pos = []
         self.max_steps = max_steps
-        self.action_space = spaces.Box(-1, 1, (2,))
+        self.action_space = spaces.Box(-1.0, 1.0, (2,), dtype="float32")
         if maze_file is None:
             self.observation_space = spaces.Box(0, 24, (2,))
             self.goal = np.arry([23,23])
@@ -174,14 +176,21 @@ class ContinuousMaze(gym.Env):
                     maze_file = rel_path
                 else:
                     raise FileExistsError("Cannot find %s." % maze_file)
-            self.observation_space = spaces.Box(-0.5, size - 0.5, (2,))
-            self.goal = np.array([size-1,size-1])
-            self.walls = np.load(maze_file, allow_pickle=False, fix_imports=True)
-            
+                self.walls = np.load(maze_file, allow_pickle=False, fix_imports=True)
+                
         self.res = res
         self.scale = res/(size + 0.1)
         self.width = res # right now assuming a square area
         self.height = res
+        
+        self.goal = np.array([size-1,size-1])
+        self.observation_space = spaces.Dict(
+            dict(
+                desired_goal=spaces.Box(0, size, (2,), dtype="float64"),
+                achieved_goal=spaces.Box(0, size, (2,), dtype="float64"),
+                observation=spaces.Box(0, size, (2,), dtype="float64"),
+            )
+        )
         
             
     def _gen_world(self, width, height):
@@ -203,7 +212,10 @@ class ContinuousMaze(gym.Env):
         self._gen_world(self.width, self.height)
         
         self.num_steps = 0
-        return self.pos.copy(), {}
+        obs_dict = {"desired_goal": self.goal.copy(),
+                    "achieved_goal": self.pos.copy(),
+                    "observation": self.pos.copy()}
+        return obs_dict, {}
     
     def _check_collision(self, agent_pos, action):
         '''Check the agent's path for collisions. '''
@@ -296,7 +308,10 @@ class ContinuousMaze(gym.Env):
             terminated = True
         else:
             truncated = False
-        return self.pos.copy(), reward, terminated, truncated,  {}
+        obs_dict = {"desired_goal": self.goal.copy(),
+                    "achieved_goal": self.pos.copy(),
+                    "observation": self.pos.copy()}
+        return obs_dict, reward, terminated, truncated,  {}
 
     def render(self, **kwargs):
         ## call pygame
@@ -388,115 +403,115 @@ class ContinuousMaze(gym.Env):
 
 
 
-class ContinuousMaze5x5(ContinuousMaze):
+class GoalContinuousMaze5x5(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze5x5, self).__init__(maze_file="maze2d_5x5.npy",render_mode=render_mode)
+        super(GoalContinuousMaze5x5, self).__init__(maze_file="maze2d_5x5.npy",render_mode=render_mode)
 
 
-class ContinuousMaze6x6(ContinuousMaze):
+class GoalContinuousMaze6x6(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze6x6, self).__init__(maze_file="maze2d_6x6.npy",render_mode=render_mode)
+        super(GoalContinuousMaze6x6, self).__init__(maze_file="maze2d_6x6.npy",render_mode=render_mode)
 
-class ContinuousMaze7x7(ContinuousMaze):
+class GoalContinuousMaze7x7(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze7x7, self).__init__(maze_file="maze2d_7x7.npy",render_mode=render_mode)
+        super(GoalContinuousMaze7x7, self).__init__(maze_file="maze2d_7x7.npy",render_mode=render_mode)
 
-class ContinuousMaze8x8(ContinuousMaze):
+class GoalContinuousMaze8x8(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze8x8, self).__init__(maze_file="maze2d_8x8.npy",render_mode=render_mode)
+        super(GoalContinuousMaze8x8, self).__init__(maze_file="maze2d_8x8.npy",render_mode=render_mode)
 
-class ContinuousMaze9x9(ContinuousMaze):
+class GoalContinuousMaze9x9(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze9x9, self).__init__(maze_file="maze2d_9x9.npy",render_mode=render_mode)
+        super(GoalContinuousMaze9x9, self).__init__(maze_file="maze2d_9x9.npy",render_mode=render_mode)
 
-class ContinuousMaze10x10(ContinuousMaze):
+class GoalContinuousMaze10x10(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze10x10, self).__init__(maze_file="maze2d_10x10.npy",render_mode=render_mode)
+        super(GoalContinuousMaze10x10, self).__init__(maze_file="maze2d_10x10.npy",render_mode=render_mode)
 
 
-class ContinuousMaze11x11(ContinuousMaze):
+class GoalContinuousMaze11x11(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze11x11, self).__init__(maze_file="maze2d_11x11.npy",render_mode=render_mode)
+        super(GoalContinuousMaze11x11, self).__init__(maze_file="maze2d_11x11.npy",render_mode=render_mode)
 
-class ContinuousMaze12x12(ContinuousMaze):
+class GoalContinuousMaze12x12(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze12x12, self).__init__(maze_file="maze2d_12x12.npy",render_mode=render_mode)
+        super(GoalContinuousMaze12x12, self).__init__(maze_file="maze2d_12x12.npy",render_mode=render_mode)
 
 
-class ContinuousMaze13x13(ContinuousMaze):
+class GoalContinuousMaze13x13(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze13x13, self).__init__(maze_file="maze2d_13x13.npy",render_mode=render_mode)
+        super(GoalContinuousMaze13x13, self).__init__(maze_file="maze2d_13x13.npy",render_mode=render_mode)
 
-class ContinuousMaze14x14(ContinuousMaze):
+class GoalContinuousMaze14x14(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze14x14, self).__init__(maze_file="maze2d_14x14.npy",render_mode=render_mode)
+        super(GoalContinuousMaze14x14, self).__init__(maze_file="maze2d_14x14.npy",render_mode=render_mode)
 
-class ContinuousMaze15x15(ContinuousMaze):
+class GoalContinuousMaze15x15(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze15x15, self).__init__(maze_file="maze2d_15x15.npy",render_mode=render_mode)
+        super(GoalContinuousMaze15x15, self).__init__(maze_file="maze2d_15x15.npy",render_mode=render_mode)
 
-class ContinuousMaze20x20(ContinuousMaze):
+class GoalContinuousMaze20x20(GoalContinuousMaze):
     def __init__(self, enable_render=False,render_mode=None):
-        super(ContinuousMaze20x20, self).__init__(maze_file="maze2d_20x20.npy",render_mode=render_mode)
+        super(GoalContinuousMaze20x20, self).__init__(maze_file="maze2d_20x20.npy",render_mode=render_mode)
         
         
-class ContinuousMazeBlocks5x5(ContinuousMaze):
+class GoalContinuousMazeBlocks5x5(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks5x5, self).__init__(maze_file='block2d_5x5.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks5x5, self).__init__(maze_file='block2d_5x5.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks6x6(ContinuousMaze):
+class GoalContinuousMazeBlocks6x6(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks6x6, self).__init__(maze_file='block2d_6x6.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks6x6, self).__init__(maze_file='block2d_6x6.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks7x7(ContinuousMaze):
+class GoalContinuousMazeBlocks7x7(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks7x7, self).__init__(maze_file='block2d_7x7.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks7x7, self).__init__(maze_file='block2d_7x7.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks8x8(ContinuousMaze):
+class GoalContinuousMazeBlocks8x8(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks8x8, self).__init__(maze_file='block2d_8x8.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks8x8, self).__init__(maze_file='block2d_8x8.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks9x9(ContinuousMaze):
+class GoalContinuousMazeBlocks9x9(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks9x9, self).__init__(maze_file='block2d_9x9.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks9x9, self).__init__(maze_file='block2d_9x9.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks10x10(ContinuousMaze):
+class GoalContinuousMazeBlocks10x10(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks10x10, self).__init__(maze_file='block2d_10x10.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks10x10, self).__init__(maze_file='block2d_10x10.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks11x11(ContinuousMaze):
+class GoalContinuousMazeBlocks11x11(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks11x11, self).__init__(maze_file='block2d_11x11.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks11x11, self).__init__(maze_file='block2d_11x11.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks12x12(ContinuousMaze):
+class GoalContinuousMazeBlocks12x12(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks12x12, self).__init__(maze_file='block2d_12x12.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks12x12, self).__init__(maze_file='block2d_12x12.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks13x13(ContinuousMaze):
+class GoalContinuousMazeBlocks13x13(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks13x13, self).__init__(maze_file='block2d_13x13.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks13x13, self).__init__(maze_file='block2d_13x13.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks14x14(ContinuousMaze):
+class GoalContinuousMazeBlocks14x14(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks14x14, self).__init__(maze_file='block2d_14x14.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks14x14, self).__init__(maze_file='block2d_14x14.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks15x15(ContinuousMaze):
+class GoalContinuousMazeBlocks15x15(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks15x15, self).__init__(maze_file='block2d_15x15.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks15x15, self).__init__(maze_file='block2d_15x15.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks16x16(ContinuousMaze):
+class GoalContinuousMazeBlocks16x16(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks16x16, self).__init__(maze_file='block2d_16x16.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks16x16, self).__init__(maze_file='block2d_16x16.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks17x17(ContinuousMaze):
+class GoalContinuousMazeBlocks17x17(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks17x17, self).__init__(maze_file='block2d_17x17.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks17x17, self).__init__(maze_file='block2d_17x17.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks18x18(ContinuousMaze):
+class GoalContinuousMazeBlocks18x18(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks18x18, self).__init__(maze_file='block2d_18x18.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks18x18, self).__init__(maze_file='block2d_18x18.npy',render_mode=render_mode)
 
-class ContinuousMazeBlocks19x19(ContinuousMaze):
+class GoalContinuousMazeBlocks19x19(GoalContinuousMaze):
 	def __init__(self, enable_render=False,render_mode=None):
-		super(ContinuousMazeBlocks19x19, self).__init__(maze_file='block2d_19x19.npy',render_mode=render_mode)
+		super(GoalContinuousMazeBlocks19x19, self).__init__(maze_file='block2d_19x19.npy',render_mode=render_mode)
 
