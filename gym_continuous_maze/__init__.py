@@ -1,6 +1,13 @@
 from gymnasium.envs.registration import register
 
 register(
+    id="ContinuousHairPinMaze-5x5-v0",
+    entry_point="gym_continuous_maze.gym_continuous_maze:ContinuousHairPinMaze5x5",
+    max_episode_steps=100,
+)
+
+
+register(
     id="ContinuousMaze-v0",
     entry_point="gym_continuous_maze.gym_continuous_maze:ContinuousMaze",
     max_episode_steps=100,
